@@ -1,0 +1,22 @@
+trigger: none
+
+pool:
+  name: abhi_agent
+
+stages:
+  - stage: DockerBuild
+    displayName: Docker Build and Push
+    jobs:
+      - job: dockerbuild
+        displayName: Build and Push Docker Image
+        steps:
+          - task: Docker@2
+            displayName: Build and Push Image
+            inputs:
+              containerRegistry: 'devacr-connection'
+              repository: 'axion-ui'
+              command: 'buildAndPush'
+              Dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+              buildContext: '$(Build.SourcesDirectory)'
+              tags: |
+                $(Build.BuildId)
